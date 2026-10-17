@@ -37,19 +37,19 @@ class SportsApp extends StatelessWidget {
       child: Consumer<AuthService>(
         builder: (context, auth, _) {
           final router = GoRouter(
-            initialLocation: auth.isLoggedIn ? '/home' : '/login',
+            initialLocation: '/login',
             routes: [
               GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
               GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
               GoRoute(path: '/fixtures', builder: (_, __) => const FixturesScreen()),
               GoRoute(
                 path: '/match/:id',
-                builder: (_, state) => MatchDetailScreen(matchId: state.pathParameters['id']!),
+                builder: (_, state) => MatchDetailScreen(matchId: state.pathParameters['id'] ?? ''),
               ),
               GoRoute(path: '/standings', builder: (_, __) => const StandingsScreen()),
               GoRoute(
                 path: '/club/:id',
-                builder: (_, state) => ClubProfileScreen(clubId: state.pathParameters['id']!),
+                builder: (_, state) => ClubProfileScreen(clubId: state.pathParameters['id'] ?? ''),
               ),
               GoRoute(path: '/store', builder: (_, __) => const StoreScreen()),
               GoRoute(path: '/roster', builder: (_, __) => const RosterScreen()),
@@ -71,13 +71,6 @@ class SportsApp extends StatelessWidget {
                 foregroundColor: Colors.white,
                 elevation: 2,
               ),
-            ),
-            darkTheme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF1565C0),
-                brightness: Brightness.dark,
-              ),
-              useMaterial3: true,
             ),
             routerConfig: router,
           );
