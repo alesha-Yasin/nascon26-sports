@@ -1,7 +1,6 @@
 """Seed baseline data and reset logic."""
 import hashlib
 from datetime import datetime
-from passlib.context import CryptContext
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,7 +9,7 @@ from app.models.models import (
     RosterLeague, Product, ProductVariant, DiscountCode, AppState
 )
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+def _hash_password(pw): return "sha256:" + __import__("hashlib").sha256(pw.encode()).hexdigest()
 
 DEFAULT_TIE_BREAK = ["h2h_points", "h2h_diff", "overall_diff", "scored", "fair_play", "draw_lots"]
 
@@ -150,7 +149,7 @@ async def seed_baseline(db: AsyncSession, seed: int = 42, stock: dict = None):
     ))
 
     # Users (5 demo accounts)
-    pw = pwd_context.hash("Nascon@26")
+    pw = _hash_password("Nascon@26")
     db.add(User(user_id="user-super-admin", email="admin@nascon.test", password_hash=pw,
                 role="super_admin", tenant_id=None))
     db.add(User(user_id="user-organizer", email="organizer@nascon.test", password_hash=pw,
